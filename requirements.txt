@@ -6,3 +6,4 @@ matplotlib==3.10.6
 customtkinter==5.2.0
 pillow==12.0.0
 setuptools
+gunicorn
