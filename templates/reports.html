@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Reports</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="reports-page">
+    <nav class="navbar animate-slide-down">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <div class="nav-user">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <a href="{{ url_for('logout') }}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="reports-container">
+        <div class="reports-header animate-fade-in">
+            <h1><i class="fas fa-chart-bar"></i> Reports & Analytics</h1>
+            <p>Comprehensive analysis of student performance data.</p>
+        </div>
+
+        <div class="charts-grid animate-fade-in-delay">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-pie"></i> Grade Distribution</h3>
+                </div>
+                <canvas id="gradeChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> Performance Overview</h3>
+                </div>
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="summary-cards animate-fade-in-delay-2">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="summary-content">
+                    <h4>{{ total_students }}</h4>
+                    <p>Total Students</p>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="summary-content">
+                    <h4>{{ avg_percentage }}%</h4>
+                    <p>Class Average</p>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="summary-content">
+                    <h4>{{ high_achievers }}</h4>
+                    <p>High Achievers (90%+)</p>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="summary-content">
+                    <h4>{{ need_improvement }}</h4>
+                    <p>Need Improvement</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-performers animate-fade-in-delay-3">
+            <div class="section-header">
+                <h2><i class="fas fa-medal"></i> Top Performers</h2>
+            </div>
+            <div class="performers-list">
+                {% for student in students %}
+                    {% if student[6] >= 80 %}
+                    <div class="performer-item">
+                        <div class="performer-rank">{{ loop.index }}</div>
+                        <div class="performer-info">
+                            <h4>{{ student[1] }}</h4>
+                            <p>Roll: {{ student[0] }} | Score: {{ "%.2f"|format(student[6]) }}%</p>
+                        </div>
+                        <div class="performer-grade">
+                            <span class="grade-badge grade-{{ student[7].lower() }}">{{ student[7] }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="export-section animate-fade-in-delay-4">
+            <div class="section-header">
+                <h2><i class="fas fa-download"></i> Export Reports</h2>
+            </div>
+            <div class="export-buttons">
+                <a href="{{ url_for('export_pdf') }}" class="btn btn-primary">
+                    <i class="fas fa-file-pdf"></i> Export as PDF
+                </a>
+                <a href="{{ url_for('export_excel') }}" class="btn btn-secondary">
+                    <i class="fas fa-file-excel"></i> Export as Excel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Grade distribution data
+        const gradeCounts = {{ grade_counts|tojson }};
+
+        // Performance data
+        const performanceData = {
+            labels: {{ student_names|tojson }},
+            data: {{ student_percentages }}
+        };
+    </script>
+    <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

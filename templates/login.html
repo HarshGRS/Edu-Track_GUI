@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page">
+    <div class="login-background">
+        <img src="{{ url_for('static', filename='edutrack_logo.png') }}" alt="Background" class="bg-logo">
+    </div>
+    <div class="login-container">
+        <div class="login-card animate-fade-in">
+            <div class="login-header">
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='edutrack_logo.png') }}" alt="EduTrack Logo" class="logo-img">
+                    <h1 class="logo-text">EduTrack</h1>
+                </div>
+                <p class="subtitle">Student Score Management System</p>
+            </div>
+
+            <form method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Enter username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Enter password" required>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'error' if category == 'error' else 'success' }} animate-slide-down">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <button type="submit" class="login-btn animate-pulse">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+
+            <div class="demo-credentials">
+                <h3>Demo Credentials</h3>
+                <div class="credential-item">
+                    <strong>Admin:</strong> admin / admin123
+                </div>
+                <div class="credential-item">
+                    <strong>Teacher:</strong> teacher / teach123
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>
